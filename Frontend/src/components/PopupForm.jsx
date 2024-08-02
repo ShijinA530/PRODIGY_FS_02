@@ -14,45 +14,56 @@ const PopupForm = () => {
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
-  const validatePhoneNumber = (phone) => {
-    const phoneRegex = /^\d{10}$/;
-    return phoneRegex.test(phone);
-  };
+  // const validatePhoneNumber = (phone) => {
+  //   const phoneRegex = /^\d{10}$/;
+  //   return phoneRegex.test(phone);
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate form fields
     const fields = { name, phone, email, hobbies };
-    const missingFields = Object.keys(fields).filter((key) => !fields[key]);
+    // const missingFields = Object.keys(fields).filter((key) => !fields[key]);
 
-    if (!validatePhoneNumber(phone)) {
-      setError('Please enter a valid phone number');
-      return;
-    }
+    // if (!validatePhoneNumber(phone)) {
+    //   setError('Please enter a valid phone number');
+     
+    // }
 
-    if (missingFields.length > 0) {
-      setEmptyFields(missingFields);
-      setError('Please fill in all fields.');
-      return;
-    }
-
+    // if (missingFields.length > 0) {
+    //   setEmptyFields(missingFields);
+    //   setError('Please fill in all fields.');
+      
+    // }
+    
     try {
       const response = await axios.post('http://localhost:4000/api/data', fields);
       const json = response.data;
-      // Reset form fields
+      console.log(json);
+
       setName('');
       setPhone('');
       setEmail('');
       setHobbies('');
       setError(null);
+      setEmptyFields([]);
       setModalVisible(false);
       dispatch({ type: 'CREATE_DATA', payload: json });
     } catch (err) {
-      setError('Failed to add data.');
-      console.error(err);
+      if (err.response) {
+        // The request was made and the server responded with a status code that falls out of the range of 2xx
+        setError(err.response.data.error);
+        setEmptyFields(err.response.data.emptyFields || []);
+      } else if (err.request) {
+        // The request was made but no response was received
+        setError('No response received from the server.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        setError('An error occurred: ' + err.message);
+      }
     }
-  };
+  }
 
   return (
     <div className="justify-center flex">
@@ -119,10 +130,9 @@ const PopupForm = () => {
                     value={name}
                     type="text"
                     name="name"
-                    id="name"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Type name"
-                    required
+                    
                   />
                 </div>
                 <div className="col-span-2">
@@ -137,10 +147,9 @@ const PopupForm = () => {
                     value={phone}
                     type="number"
                     name="phone"
-                    id="phone"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Mobile"
-                    required
+                    
                   />
                 </div>
                 <div className="col-span-2">
@@ -153,12 +162,10 @@ const PopupForm = () => {
                   <input
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
-                    type="email"
+                    type="text"
                     name="email"
-                    id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="abcd@gmail.com"
-                    required
                   />
                 </div>
                 <div className="col-span-2">

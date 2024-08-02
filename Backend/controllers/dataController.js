@@ -14,6 +14,37 @@ module.exports.getInfos = async (req, res) => {
 module.exports.createInfo = async (req, res) => {
     const { name, phone, email, hobbies } = req.body
 
+    let emptyFields = []
+
+    if (!name) {
+        emptyFields.push('name')
+    }
+    if (!phone) {
+        emptyFields.push('phone')
+    }
+    if (!email) {
+        emptyFields.push('email')
+    }
+    if (!hobbies) {
+        emptyFields.push('hobbies')
+    }
+    const phoneRegex = /^\d{10}$/;
+    if (phone && !phoneRegex.test(phone)) {
+        emptyFields.push('phone (must be 10 digits)');
+        return res.status(400).json({ error: 'phone (must be 10 digits)', emptyFields });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email && !emailRegex.test(email)) {
+        emptyFields.push('email (invalid format)');
+        return res.status(400).json({ error: 'email (invalid format)', emptyFields });
+    }
+
+    if (emptyFields.length > 0) {
+        return res.status(400).json({ error: 'Please fill in all the fields correctly', emptyFields });
+    }
+
     try {
         const info = await Person.create({ name, phone, email, hobbies })
         res.status(200).json(info)
@@ -43,7 +74,7 @@ module.exports.updateInfo = async (req, res) => {
     const { id } =req.params
     
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({error: 'No such workout'})
+        return res.status(404).json({error: 'No such data'})
     }
 
     const info = await Person.findOneAndUpdate({ _id: id }, { ...req.body }, { new: true })
