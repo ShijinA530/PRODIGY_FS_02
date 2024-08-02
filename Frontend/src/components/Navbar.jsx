@@ -2,9 +2,9 @@ import React from 'react'
 
 const Navbar = () => {
   return (
-    <header className='bg-gray-300'>
-        <div className='max-w-[1400px] mx-auto px-[20px] py-[10px] items-center justify-between'>
-            <h1 className='text-black text-3xl font-semibold'>Info</h1>
+    <header className='bg-gray-400'>
+        <div className='max-w-[1400px] mx-auto py-6 flex justify-center'>
+            <h1 className='text-white text-3xl font-semibold'>Personal Data</h1>
         </div>
     </header>
   )

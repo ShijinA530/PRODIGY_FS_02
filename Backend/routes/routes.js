@@ -14,4 +14,6 @@ router.delete('/:id', dataController.deleteInfo)
 //UPDATE a data
 router.patch('/:id', dataController.updateInfo)
 
+//sending data via email
+router.post('/send-email',dataController.sendEmail)
 module.exports = router

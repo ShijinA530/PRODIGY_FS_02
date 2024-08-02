@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useDataContext } from '../hooks/useDataContext';
 
 const PopupForm = () => {
+  const { dispatch } = useDataContext();
+
   const [isModalVisible, setModalVisible] = useState(false);
+
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -10,13 +14,23 @@ const PopupForm = () => {
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
+  const validatePhoneNumber = (phone) => {
+    const phoneRegex = /^\d{10}$/;
+    return phoneRegex.test(phone);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate form fields
     const fields = { name, phone, email, hobbies };
-    const missingFields = Object.keys(fields).filter(key => !fields[key]);
-    
+    const missingFields = Object.keys(fields).filter((key) => !fields[key]);
+
+    if (!validatePhoneNumber(phone)) {
+      setError('Please enter a valid phone number');
+      return;
+    }
+
     if (missingFields.length > 0) {
       setEmptyFields(missingFields);
       setError('Please fill in all fields.');
@@ -25,13 +39,15 @@ const PopupForm = () => {
 
     try {
       const response = await axios.post('http://localhost:4000/api/data', fields);
-      console.log(response.data);
+      const json = response.data;
       // Reset form fields
       setName('');
       setPhone('');
       setEmail('');
       setHobbies('');
+      setError(null);
       setModalVisible(false);
+      dispatch({ type: 'CREATE_DATA', payload: json });
     } catch (err) {
       setError('Failed to add data.');
       console.error(err);
@@ -39,11 +55,9 @@ const PopupForm = () => {
   };
 
   return (
-    <div className='justify-center flex'>
+    <div className="justify-center flex">
       <button
-        onClick={() => {
-            setModalVisible(!isModalVisible);
-        }}
+        onClick={() => setModalVisible(!isModalVisible)}
         className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button"
       >
@@ -52,9 +66,7 @@ const PopupForm = () => {
 
       {isModalVisible && (
         <div
-          id="crud-modal"
           tabIndex="-1"
-          aria-hidden="true"
           className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50"
         >
           <div className="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow dark:bg-gray-700">
@@ -64,12 +76,12 @@ const PopupForm = () => {
               </h3>
               <button
                 onClick={() => {
-                    setModalVisible(!isModalVisible);
-                    setName('');
-                    setPhone('');
-                    setEmail('');
-                    setHobbies('');
-                    setError('')
+                  setModalVisible(!isModalVisible);
+                  setName('');
+                  setPhone('');
+                  setEmail('');
+                  setHobbies('');
+                  setError(null);
                 }}
                 type="button"
                 className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -129,6 +141,11 @@ const PopupForm = () => {
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Mobile"
                     required
+                    onKeyDown={(e) => {
+                      if (['e', 'E', '+', '-', '.', ' '].includes(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
                   />
                 </div>
                 <div className="col-span-2">
@@ -167,8 +184,8 @@ const PopupForm = () => {
                   />
                 </div>
               </div>
-              {error && <p className="text-red-500">{error}</p>}
-              <div className='flex justify-center'>
+              {error && <p className="text-red-500 pb-3">{error}</p>}
+              <div className="flex justify-center">
                 <button
                   type="submit"
                   className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

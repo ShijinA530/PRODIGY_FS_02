@@ -9,6 +9,7 @@ const personSchema = new Schema({
     },
     phone: {
         type: Number,
+        length: 10,
         required: true,
         unique: true
     },
