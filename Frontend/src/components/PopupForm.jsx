@@ -38,7 +38,7 @@ const PopupForm = () => {
     // }
     
     try {
-      const response = await axios.post('http://localhost:4000/api/data', fields);
+      const response = await axios.post('https://personal-data-collection.onrender.com/api/data', fields);
       const json = response.data;
       console.log(json);
 

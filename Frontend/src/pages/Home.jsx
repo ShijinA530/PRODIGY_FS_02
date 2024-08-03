@@ -10,7 +10,7 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/data')
+        const response = await axios.get('https://personal-data-collection.onrender.com/api/data')
         const json = response.data
         
         dispatch({type: 'SET_DATA', payload: json})

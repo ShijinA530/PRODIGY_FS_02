@@ -40,7 +40,7 @@ const Table = ({ data }) => {
 
   const handleDelete = async (info) => {
     try {
-      const response = await axios.delete('http://localhost:4000/api/data/' + info._id)
+      const response = await axios.delete('https://personal-data-collection.onrender.com/api/data/' + info._id)
       const json = response.data
       dispatch({ type: 'DELETE_DATA', payload: json })
     } catch (err) {
@@ -76,7 +76,7 @@ const Table = ({ data }) => {
 
   const handleSaveClick = async (info) => {
     try {
-      const response = await axios.patch('http://localhost:4000/api/data/' + info._id, editData)
+      const response = await axios.patch('https://personal-data-collection.onrender.com/api/data/' + info._id, editData)
       const json = response.data
       dispatch({ type: 'UPDATE_DATA', payload: json })
       setEditId(null)
@@ -113,7 +113,7 @@ const Table = ({ data }) => {
       setNoDataError(true)
     } else {
       try {
-        const response = await axios.post('http://localhost:4000/api/data/send-email', markedData)
+        const response = await axios.post('https://personal-data-collection.onrender.com/api/data/send-email', markedData)
         console.log(response.data)
         setEmailSent(true)
       } catch (error) {
