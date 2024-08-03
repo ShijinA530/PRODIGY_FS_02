@@ -109,7 +109,7 @@ module.exports.sendEmail = async (req, res) => {
   
     let mailOptions = {
       from: process.env.EMAIL_USER,
-      to: '20br13246@rit.ac.in',
+      to: 'info@redpositive.in',
       subject: 'New Sent Data',
       text: emailContent
     }
