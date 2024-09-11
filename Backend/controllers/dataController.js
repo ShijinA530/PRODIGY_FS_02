@@ -30,14 +30,14 @@ module.exports.createInfo = async (req, res) => {
     }
     const phoneRegex = /^\d{10}$/;
     if (phone && !phoneRegex.test(phone)) {
-        emptyFields.push('phone (must be 10 digits)');
+        emptyFields.push('phone');
         return res.status(400).json({ error: 'phone (must be 10 digits)', emptyFields });
     }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (email && !emailRegex.test(email)) {
-        emptyFields.push('email (invalid format)');
+        emptyFields.push('email');
         return res.status(400).json({ error: 'email (invalid format)', emptyFields });
     }
 
