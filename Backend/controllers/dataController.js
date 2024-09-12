@@ -88,9 +88,11 @@ module.exports.updateInfo = async (req, res) => {
 
 // send data via email
 module.exports.sendEmail = async (req, res) => {
-    const markedData = req.body
-  
-    const emailContent = markedData.map(info => `
+    const { email, data } = req.body
+    console.log(email);
+    
+
+    const emailContent = data.map(info => `
       Name: ${info.name}
       Phone: ${info.phone}
       Email: ${info.email}
@@ -109,7 +111,7 @@ module.exports.sendEmail = async (req, res) => {
   
     let mailOptions = {
       from: process.env.EMAIL_USER,
-      to: 'info@redpositive.in',
+      to: email,
       subject: 'New Sent Data',
       text: emailContent
     }
