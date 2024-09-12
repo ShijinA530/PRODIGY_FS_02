@@ -19,6 +19,7 @@ const Table = ({ data }) => {
   const [selectedRows, setSelectedRows] = useState([])
   const [emailSent, setEmailSent] = useState(false)
   const [noDataError, setNoDataError] = useState(false)
+  const [sentEmail,setSentEmail] = useState('')
 
   const emailSentRef = useRef(null)
   const noDataErrorRef = useRef(null)
@@ -97,12 +98,16 @@ const Table = ({ data }) => {
 
   const handleSend = async () => {
     const markedData = data.filter(info => selectedRows.includes(info._id))
-
+    console.log(markedData);
+    
     if (markedData.length === 0) {
       setNoDataError(true)
     } else {
       try {
-        const response = await axios.post('https://personal-data-collection.onrender.com/api/data/send-email', markedData)
+        const response = await axios.post('/api/data/send-email', {
+          email: sentEmail,
+          data: markedData
+        })
         console.log(response.data)
         setEmailSent(true)
       } catch (error) {
@@ -207,6 +212,18 @@ const Table = ({ data }) => {
       </div>
       <div className="flex flex-col items-center p-6">
         <PopupForm />
+        <label
+          className="text-base sm:text-lg font-medium mt-4 text-gray-700 dark:text-gray-300"
+        >
+          Enter email to which details are to be sent:
+        </label>
+        <input
+          onChange={(e) => setSentEmail(e.target.value)}
+          type="email"
+          value={sentEmail}
+          placeholder="Email"
+          className="w-full sm:w-auto p-3 mt-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:border-blue-500 transition-colors duration-300"
+        />
         <button
           onClick={handleSend}
           className="mt-4 text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
