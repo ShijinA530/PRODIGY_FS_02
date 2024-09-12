@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import axios from 'axios'
+import axios from '../axios/axios'
 import { useDataContext } from './../hooks/useDataContext';
 
 const EditRow = ({ info, index, handleCheckboxChange, selectedRows, editData, setEditData, setEditId }) => {
@@ -12,7 +12,7 @@ const EditRow = ({ info, index, handleCheckboxChange, selectedRows, editData, se
       
     const handleSaveClick = async (info) => {
         try {
-          const response = await axios.patch('https://personal-data-collection.onrender.com/api/data/' + info._id, editData)
+          const response = await axios.patch('/api/data/' + info._id, editData)
           const json = response.data
           dispatch({ type: 'UPDATE_DATA', payload: json })
           setEditId(null)

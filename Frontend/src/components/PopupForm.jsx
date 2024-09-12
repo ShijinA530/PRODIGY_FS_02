@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from '../axios/axios';
 import { useDataContext } from '../hooks/useDataContext';
 
 const PopupForm = () => {
@@ -38,7 +38,7 @@ const PopupForm = () => {
     // }
     
     try {
-      const response = await axios.post('https://personal-data-collection.onrender.com/api/data', fields);
+      const response = await axios.post('/api/data', fields);
       const json = response.data;
       console.log(json);
 
