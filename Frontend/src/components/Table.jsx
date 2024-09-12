@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useDataContext } from "../hooks/useDataContext"
-import axios from 'axios'
+import axios from '../axios/axios'
 import PopupForm from './PopupForm'
 import EditRow from './EditRow'
 
@@ -42,7 +42,7 @@ const Table = ({ data }) => {
 
   const handleDelete = async (info) => {
     try {
-      const response = await axios.delete('https://personal-data-collection.onrender.com/api/data/' + info._id)
+      const response = await axios.delete('/api/data/' + info._id)
       const json = response.data
       dispatch({ type: 'DELETE_DATA', payload: json })
     } catch (err) {

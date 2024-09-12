@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import axios from '../axios/axios'
 import PopupForm from '../components/PopupForm'
 import Table from '../components/Table'
 import { useDataContext } from '../hooks/useDataContext'
@@ -14,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://personal-data-collection.onrender.com/api/data')
+        const response = await axios.get('/api/data')
         const json = response.data
         
         dispatch({type: 'SET_DATA', payload: json})
