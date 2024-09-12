@@ -116,7 +116,7 @@ const Table = ({ data }) => {
     <div>
       {showConfirmation && (
         <div className="fixed top-0 z-50 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg">
+          <div className="bg-white p-8 rounded shadow-lg">
             <p>Are you sure you want to delete this item?</p>
             <div className="flex justify-center mt-4">
               <button
